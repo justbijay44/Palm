@@ -1,2 +1,5 @@
 fastapi
-uvicorn
+uvicorn[standard]   # uvicorn + extra dependencies
+python-multipart    # for form/file uploads
+pydantic            # validation
+PyPDF2              # text extraction

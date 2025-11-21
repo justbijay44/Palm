@@ -17,7 +17,7 @@ def root():
         <body>
             <h1>Welcome to PALM APIs</h1>
             <ul>
-                <li><a href="/ingest/">Document Ingestion API</a></li>
+                <li><a href="/ingestion/">Document Ingestion API</a></li>
                 <li><a href="/rag/">Custom RAG API</a></li>
                 <li><a href="/docs">Swagger Docs</a></li>
                 <li><a href="/redoc">Redoc Docs</a></li>
