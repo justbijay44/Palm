@@ -10,7 +10,8 @@ from fastapi import APIRouter, UploadFile, File, HTTPException, status
 
 router = APIRouter()
 
-UPLOADED_DIR = Path('uploads')
+BASE_DIR = Path(__file__).resolve().parent.parent 
+UPLOADED_DIR = BASE_DIR / "uploads"
 UPLOADED_DIR.mkdir(parents=True, exist_ok=True)
 
 allowed_file_ext = {'.pdf', '.txt'}
@@ -181,3 +182,63 @@ async def chunk_document(request: ChunkRequest):
         "preview": chunks[:3],
         "chunks": chunks,
     }
+
+from app.services.ingestion_services import ingestion_pipeline
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.db.database import get_session
+from fastapi import Depends
+
+class IngestionResponse(BaseModel):
+    document_id: int
+    filename: str
+    total_chunks: int
+    message: str
+
+@router.post("/ingest", response_model= IngestionResponse, status_code=status.HTTP_201_CREATED)
+async def ingest_document(
+    file: UploadFile = File(...),
+    chunk_strategy: str = "fixed",
+    chunk_size: int = 500,
+    session: AsyncSession = Depends(get_session)
+):
+    """
+    Complete document ingestion pipeline:
+    Upload → Extract → Chunk → Embed → Store in Qdrant → Save to DB
+    """
+    if not _is_allowed(file.filename):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Unsupported file extension. Allowed: {', '.join(allowed_file_ext)}"
+        )
+    
+    content = await file.read()
+    if len(content) > max_file_size:
+        raise HTTPException(
+            status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+            detail=f'File too large. Max: {max_file_size} bytes'
+        )
+    
+    try:
+        doc_id, filename, total_chunks = await ingestion_pipeline(
+            file_content=content,
+            filename=file.filename,
+            chunk_strategy=chunk_strategy,
+            chunk_size=chunk_size,
+            session=session
+        )
+        
+        return IngestionResponse(
+            document_id=doc_id,
+            filename=filename,
+            total_chunks=total_chunks,
+            message="Document ingested successfully"
+        )
+        
+    except ValueError as e:
+        print(f"ValueError: {e}") 
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        print(f"Exception: {type(e).__name__}: {e}")  
+        import traceback
+        traceback.print_exc() 
+        raise HTTPException(status_code=500, detail=f"Ingestion failed: {str(e)}")
