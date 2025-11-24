@@ -1,1 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env
 venv/
+
+# env variable
+.env
+
+# internal files
+app.db
+uploads/
+qdrant_storage/
+test_file.py
+run_test.py
+
+# Docker & temp
+*.pid

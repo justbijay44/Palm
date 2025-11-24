@@ -5,10 +5,9 @@ pydantic                # validation
 PyPDF2                  # text extraction
 
 sqlalchemy[aio]         # supports async db
-             
-sentence-transformers   # for embedding
-# pinecone-client     
+sentence-transformers   # for embedding 
 qdrant-client           # both pinecone and qdrant to store embedding
 aiosqlite
 
-# docker run -p 6333:6333 qdrant/qdrant
+redis
+groq

@@ -183,7 +183,7 @@ async def chunk_document(request: ChunkRequest):
         "chunks": chunks,
     }
 
-from app.services.ingestion_services import ingestion_pipeline
+from app.services.ingestion.ingestion_services import ingestion_pipeline
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.database import get_session
 from fastapi import Depends

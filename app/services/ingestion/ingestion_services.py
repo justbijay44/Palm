@@ -5,8 +5,8 @@ from PyPDF2 import PdfReader
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.models import Document, Chunk
-from app.services.embeddings import get_embeddings
-from app.services.vector_store import QdrantStore
+from app.services.shared.embeddings import get_embeddings
+from app.services.shared.vector_store import QdrantStore
 from app.helper import chunk_fixed, chunk_semantic
 
 UPLOADED_DIR = Path('uploads')

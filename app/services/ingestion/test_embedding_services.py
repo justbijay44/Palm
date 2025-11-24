@@ -1,5 +1,5 @@
 import asyncio
-from app.services.embeddings import get_embeddings
+from app.services.shared.embeddings import get_embeddings
 
 async def test():
     texts = ["Hello world", "This is a test", "Another document"]

@@ -3,8 +3,12 @@
 
 ### How to run
 
-# 1. Start Qdrant
-docker run -p 6333:6333 qdrant/qdrant
+# 1. Start Qdrant with docker
+<!-- docker run -p 6333:6333 qdrant/qdrant -->
+docker-compose up -d 
+
+# To stop the docker
+docker compose down
 
 # 2. Install & run
 pip install -r requirements.txt
