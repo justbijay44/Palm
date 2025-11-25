@@ -11,3 +11,5 @@ aiosqlite
 
 redis
 groq
+
+streamlit
