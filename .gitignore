@@ -1,6 +1,9 @@
 # Python
 __pycache__/
+**/__pycache__/
 *.pyc
+*.pyo
+*.pyd
 
 # Virtual env
 venv/
@@ -10,10 +13,25 @@ venv/
 
 # internal files
 app.db
+app/db/__pycache__/models.cpython-312.pyc
+app/routes/__pycache__/custom_rag.cpython-312.pyc
+
 uploads/
+media/
 qdrant_storage/
 test_file.py
 run_test.py
 
 # Docker & temp
 *.pid
+
+#sqlite
+*.db
+*.sqlite3
+
+# Local development files
+.DS_Store
+*.log
+
+# VSCode
+.vscode/
